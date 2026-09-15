@@ -1,0 +1,33 @@
+import cv2
+import numpy as np
+
+img_path = r"C:\Users\ngoc tuyet\Downloads\Fig0335(a)(ckt_board_saltpep_prob_pt05) (1).png"
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+def MedianFilter(img, size):
+    a = size // 2
+    img_pad = np.pad(img, a, mode="constant", constant_values=0)
+
+    H, W = img.shape
+    img_out = np.zeros((H, W), np.uint8)
+
+    for x in range(H):
+        for y in range(W):
+            w = np.zeros((size, size), np.uint8)
+            for s in range(-a, a + 1):
+                for t in range(-a, a + 1):
+                    w[a + s, a + t] = img_pad[x + a + s, y + a + t]
+            w_1D = np.reshape(w, (size*size,))
+            w_sort = np.sort(w_1D)
+            median = w_sort[(size*size) // 2]
+            img_out[x, y] = median
+
+    return img_out
+
+img_out = MedianFilter(img, 3)
+
+cv2.imshow('Original image', img)
+cv2.imshow('MedianFilter image', img_out)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
