@@ -1,0 +1,35 @@
+import cv2
+import numpy as np
+
+img_path = r"C:\Users\ngoc tuyet\Downloads\Fig0316(2)(2nd_from_top).png"
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+rmin = np.min(img)
+rmax = np.max(img)
+rmean = np.mean(img)
+
+def ContrastStretching(img, r1, r2, s1, s2):
+    W, H = img.shape
+    img_contrast = np.zeros((W,H), np.uint8)
+    for x in range(0, W):
+        for y in range(0, H):
+            r = img[x, y]
+            if (r <= r1):
+                s = (s1/r1)*r
+            elif ((r > r1) & (r <= r2)):
+                s = (s2 - s1)/(r2 - r1)*r + (s1*r2 - s2*r1)/(r2 - r1)
+            else:
+                s = (255 - s2)/(255 - r2)*r + (255*(s2 - r2))/(255 - r2)
+                
+            img_contrast[x, y] = np.uint8(s)
+    return img_contrast
+
+img_contrast = ContrastStretching(img, rmin, rmax, 0.0, 255.0)
+img_threshold = ContrastStretching(img, rmean, rmean, 0.0, 255.0)
+
+cv2.imshow('Original image', img)
+cv2.imshow('Contrast Stretched image', img_contrast)
+cv2.imshow('Thresholded image', img_threshold)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
