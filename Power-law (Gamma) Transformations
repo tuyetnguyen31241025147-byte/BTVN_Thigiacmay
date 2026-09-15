@@ -1,0 +1,27 @@
+import cv2
+import numpy as np
+
+img_path = r"C:\Users\ngoc tuyet\Downloads\Fig0308(a)(fractured_spine) (1).png"
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+def GrammaTransform(img, gramma):
+    W, H = img.shape
+    img_gramma = np.zeros((W,H), np.uint8)
+    c = np.power(255, 1 - gramma)
+    for x in range(0, W):
+        for y in range(0, H):
+            r = img[x, y]
+            s = c*np.power(r, gramma)
+            img_gramma[x, y] = np.uint8(s)
+    return img_gramma
+
+img_gramma_1 = GrammaTransform(img, 3.0)
+img_gramma_2 = GrammaTransform(img, 4.0)
+img_gramma_3 = GrammaTransform(img, 5.0)
+cv2.imshow('Original image', img)
+cv2.imshow('Gramma Transfromation image (gramma = 3)', img_gramma_1)
+cv2.imshow('Gramma Transfromation image (gramma = 4)', img_gramma_2)
+cv2.imshow('Gramma Transfromation image (gramma = 5)', img_gramma_3)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
