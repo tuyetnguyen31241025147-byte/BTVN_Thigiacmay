@@ -1,0 +1,25 @@
+import cv2
+import numpy as np
+
+img_path = r"C:\Users\ngoc tuyet\Downloads\Fig0107(b)(kidney-original).png"
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+rmean = np.mean(img)
+W, H = img.shape
+img_slicing_1 = np.zeros((W,H), np.uint8)
+img_slicing_2 = img.copy()
+
+for x in range(0, W):
+    for y in range(0, H):
+        r = img[x, y]
+        if ((r >= 150) & (r <= 255)):
+            img_slicing_1[x, y] = 200
+        if ((r >= (rmean - 35)) & (r <= (rmean + 35))):
+            img_slicing_2[x, y] = 0
+
+cv2.imshow('Original image', img)
+cv2.imshow('Intensity-level Slicing 1', img_slicing_1)
+cv2.imshow('Intensity-level Slicing 2', img_slicing_2)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
