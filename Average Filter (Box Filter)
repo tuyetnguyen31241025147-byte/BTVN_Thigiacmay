@@ -24,4 +24,4 @@ cv2.imshow('Original image', img)
 cv2.imshow('Filtered image', img_out)
 
 cv2.waitKey(0)
-cv2.destroyAllWindows()3r
+cv2.destroyAllWindows()
