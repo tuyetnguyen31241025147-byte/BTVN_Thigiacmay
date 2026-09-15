@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+
+img_path = r"C:\Users\ngoc tuyet\Downloads\Fig0232(a)(partial_body_scan).png"
+
+img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+
+img_f = img.astype(np.float32)
+
+kernel_gx = np.array([[0, 0, 0],
+                       [0, -1, 0],
+                       [0, 0, 1]], np.float32)
+
+kernel_gy = np.array([[0, 0, 0],
+                       [0, 0, -1],
+                       [0, 1, 0]], np.float32)
+
+gx = cv2.filter2D(img_f, -1, kernel_gx)
+
+gy = cv2.filter2D(img_f, -1, kernel_gy)
+
+M = np.abs(gx) + np.abs(gy)
+
+gx_display = cv2.normalize(gx, None, 0, 255, cv2.NORM_MINMAX)
+
+gy_display = cv2.normalize(gy, None, 0, 255, cv2.NORM_MINMAX)
+
+M_display = np.clip(M, 0, 255).astype(np.uint8)
+
+cv2.imshow('Original image', img)
+
+cv2.imshow('Gx', gx_display.astype(np.uint8))
+
+cv2.imshow('Gy', gy_display.astype(np.uint8))
+
+cv2.imshow('Output image (Roberts)', M_display)
+
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()
